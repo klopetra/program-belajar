@@ -15,15 +15,39 @@ document.addEventListener('DOMContentLoaded', () => {
     window.open(waUrl, '_blank');
   };
 
-  // 2. Sticky Navbar scroll effect
+  // 2. Sticky Navbar scroll effect & Active Tab Scrollspy
   const navbar = document.querySelector('.navbar');
-  window.addEventListener('scroll', () => {
+  const sections = document.querySelectorAll('section[id]');
+  const navLinksItems = document.querySelectorAll('.nav-link');
+
+  function updateActiveNav() {
+    const scrollPosition = window.scrollY + 110;
+
+    sections.forEach(section => {
+      const top = section.offsetTop;
+      const height = section.offsetHeight;
+      const id = section.getAttribute('id');
+
+      if (scrollPosition >= top && scrollPosition < top + height) {
+        navLinksItems.forEach(link => {
+          if (link.getAttribute('href') === `#${id}`) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+    });
+
     if (window.scrollY > 20) {
       navbar.classList.add('scrolled');
     } else {
       navbar.classList.remove('scrolled');
     }
-  });
+  }
+
+  window.addEventListener('scroll', updateActiveNav, { passive: true });
+  updateActiveNav();
 
   // 3. Mobile Navigation Menu Toggle
   const mobileToggle = document.querySelector('.mobile-toggle');
